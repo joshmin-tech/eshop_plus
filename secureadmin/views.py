@@ -403,7 +403,8 @@ def sales_report(request):
     
 
 def monthly_report(request):
-    if request.method == 'POST':
+    # if request.method == 'POST':
+    if request.POST.get('month'):
         month = request.POST['month']
         x=[]
         x = month.split("-")
@@ -416,46 +417,53 @@ def monthly_report(request):
             'ordered':deliver,
             'total':total
         }
-        
         return render(request,'admin/admin_report.html',context)
-    total_order=OrderProduct.objects.filter(status='Accepted') 
-    total=0 
-    for delive in total_order:
-            total+=delive.product_price
-  
-    context={
-            'ordered':total_order,
-             'total':total
-        }
-         
+    else:       
+        total_order=OrderProduct.objects.filter(status='Accepted') 
+        total=0 
+        for delive in total_order:
+                total+=delive.product_price
+    
+        context={
+                'ordered':total_order,
+                'total':total
+            }  
     return render(request,'admin/admin_report.html',context)  
 
 
 
 def yearly_report(request):
-    if request.method=='GET':
+    if request.GET.get('year'):
+    # if request.method=='GET':
         year=request.GET['year']
-        print(year)
         total_order=OrderProduct.objects.filter(created_at__year=year,status='Accepted')
         total=0
-        print(total_order)
         for delive in total_order:
             total+=delive.product_price
         context={
             'ordered':total_order,
              'total':total
         }
-        return render(request,'admin/admin_report.html',context)     
+        return render(request,'admin/admin_report.html',context)
+    else:
+        total_order=OrderProduct.objects.filter(status='Accepted')
+        total=0
+        for delive in total_order:
+            total+=delive.product_price
+        context={
+            'ordered':total_order,
+             'total':total
+        }
+        return render(request,'admin/admin_report.html',context)
+             
 
 
 
 def datewise_report(request):
-    if request.method=="GET":
+    if request.GET.get('start','end'):
         start=request.GET['start']           
         end=request.GET['end']   
         total_order=OrderProduct.objects.filter(created_at__range=[start,end],status='Accepted')
-        print(total_order)
-        print(start,end) 
         total=0
         for delive in total_order:
             total+=delive.product_price
@@ -463,7 +471,17 @@ def datewise_report(request):
             'ordered':total_order,
              'total':total
         }
-
+        return render(request,'admin/admin_report.html',context) 
+    else:
+        total_order=OrderProduct.objects.filter(status='Accepted')
+        total=0
+        for delive in total_order:
+            total+=delive.product_price
+        context={
+            'ordered':total_order,
+             'total':total,
+        }
+        
         return render(request,'admin/admin_report.html',context)     
     
 

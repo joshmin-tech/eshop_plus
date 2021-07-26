@@ -24,7 +24,7 @@ def store(request,category_slug=None):
             else:
                 prod.offer_price=None
                 prod.save(update_fields=['offer_price'])
-        paginator=Paginator(products,2)
+        paginator=Paginator(products,3)
         page=request.GET.get('page')
         paged_products=paginator.get_page(page)
         product_count = products.count()
@@ -36,7 +36,7 @@ def store(request,category_slug=None):
             else:
                 prod.offer_price=None
                 prod.save(update_fields=['offer_price'])
-        paginator=Paginator(products,2)
+        paginator=Paginator(products,3)
         page=request.GET.get('page')
         paged_products=paginator.get_page(page)
         product_count = products.count()
